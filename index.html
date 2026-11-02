@@ -18,7 +18,13 @@
         --amber: #e0a92a;
         --crimson: #c94b3a;
     }
-
+/* ── KO-FI WIDGET POSITION ─────────────────────── */
+.kofi-widget-wrapper {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+}
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
@@ -45,7 +51,16 @@
         margin: 0 auto;
         padding: 0 20px;
     }
+<div class="kofi-widget-wrapper">
+    <script type="text/javascript" src="https://storage.ko-fi.com/cdn/widget/Widget_2.js"></script>
+    <script type="text/javascript">
+        kofiwidget2.init('Support me on Ko-fi', '#d19f2a', 'Q8Y22953MB');
+        kofiwidget2.draw();
+    </script>
+</div>
 
+</body>
+</html>
     /* ── HERO SECTION ──────────────────────────────── */
     .hero {
         min-height: 80vh;
