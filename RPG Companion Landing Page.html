@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RPG Companion - Your Quest Tools</title>
+<style>
+    :root {
+        --wood-dark: #2a1810;
+        --wood-mid: #5a3820;
+        --wood-light: #8a5c33;
+        --gold: #d6ab60;
+        --gold-bright: #f2d79a;
+        --parch: #eadcbb;
+        --parch-dark: #dcc79c;
+        --ink: #432c15;
+        --emerald: #3fbf6f;
+        --amber: #e0a92a;
+        --crimson: #c94b3a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+        color: var(--gold-bright);
+        min-height: 100vh;
+        background-color: #3a2314;
+        background-image:
+            radial-gradient(ellipse at 50% -12%, rgba(255,196,110,.20), transparent 62%),
+            repeating-linear-gradient(90deg,
+                rgba(0,0,0,.40) 0 2px,
+                rgba(124,82,48,.50) 2px 134px,
+                rgba(86,55,31,.62) 135px 140px),
+            repeating-linear-gradient(91deg,
+                rgba(255,255,255,.035) 0 1px,
+                rgba(0,0,0,.055) 1px 4px,
+                rgba(255,255,255,.018) 4px 7px),
+            linear-gradient(180deg,#4a2d19,#2a1810);
+        background-attachment: fixed;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* ── HERO SECTION ──────────────────────────────── */
+    .hero {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 4rem 2rem;
+        position: relative;
+    }
+
+    .hero::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(214,171,96,0.12) 0%, transparent 60%);
+        pointer-events: none;
+    }
+
+    .d20-logo {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 2rem;
+        animation: float 6s ease-in-out infinite;
+        filter:
+            drop-shadow(0 6px 12px rgba(0,0,0,.75))
+            drop-shadow(0 0 20px rgba(214,171,96,.45));
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(2deg); }
+    }
+
+    .d20-logo .shell {
+        fill: rgba(138,92,51,.35);
+        stroke: var(--gold-bright);
+        stroke-width: 5;
+        stroke-linejoin: round;
+    }
+
+    .d20-logo .wire {
+        fill: none;
+        stroke: var(--gold-bright);
+        stroke-width: 4;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+    }
+
+    .d20-logo .face {
+        fill: rgba(246,224,176,.40);
+        stroke: var(--gold);
+        stroke-width: 4;
+        stroke-linejoin: round;
+    }
+
+    .d20-logo .num {
+        fill: var(--gold-bright);
+        font-family: inherit;
+        font-size: 48px;
+        font-weight: 700;
+    }
+
+    h1 {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--gold-bright);
+        text-shadow:
+            0 1px 0 rgba(43,24,12,.95),
+            0 -1px 0 rgba(255,244,214,.35),
+            0 8px 20px rgba(0,0,0,.75),
+            0 0 30px rgba(214,171,96,.35);
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+        font-style: italic;
+        color: rgba(232,205,158,.85);
+        margin-bottom: 3rem;
+        max-width: 600px;
+        line-height: 1.6;
+        position: relative;
+        z-index: 1;
+    }
+
+    .ornament {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin: 2rem auto;
+        max-width: 500px;
+        color: var(--gold);
+    }
+
+    .ornament span {
+        flex: 1;
+        height: 3px;
+        border-radius: 3px;
+        background: linear-gradient(90deg, transparent, rgba(214,171,96,.85), transparent);
+        box-shadow: 0 0 10px rgba(214,171,96,.45);
+    }
+
+    .ornament b {
+        font-size: 1.3rem;
+        letter-spacing: 0.2em;
+    }
+
+    /* ── CARDS SECTION ─────────────────────────────── */
+    .cards-section {
+        padding: 2rem 2rem 6rem;
+    }
+
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2.5rem;
+        margin-top: 3rem;
+    }
+
+    .card {
+        position: relative;
+        border-radius: 20px;
+        border: 5px solid #33200f;
+        padding: 2.5rem;
+        background-color: #5a3820;
+        background-image:
+            repeating-linear-gradient(88deg,
+                rgba(0,0,0,.12) 0 1px,
+                rgba(255,226,178,.035) 1px 3px,
+                rgba(0,0,0,.07) 3px 6px),
+            linear-gradient(180deg, #7d5231, #5c3a20 56%, #4a2d19);
+        box-shadow:
+            inset 0 0 0 3px rgba(169,116,63,.9),
+            inset 0 0 40px rgba(0,0,0,.55),
+            0 20px 50px rgba(0,0,0,.65);
+        transition: transform 0.25s, box-shadow 0.25s;
+        cursor: pointer;
+        overflow: hidden;
+        text-decoration: none;
+        display: block;
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow:
+            inset 0 0 0 3px rgba(169,116,63,.95),
+            inset 0 0 50px rgba(0,0,0,.6),
+            0 30px 70px rgba(0,0,0,.75),
+            0 0 40px rgba(214,171,96,.25);
+    }
+
+    .card::before {
+        content: "";
+        position: absolute;
+        inset: 10px;
+        border: 2px dashed rgba(230,192,120,.35);
+        border-radius: 14px;
+        pointer-events: none;
+    }
+
+    .card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background-image:
+            radial-gradient(circle at 18px 18px, rgba(245,222,168,.95) 0 3px, rgba(0,0,0,.6) 3px 5px, transparent 5px),
+            radial-gradient(circle at calc(100% - 18px) 18px, rgba(245,222,168,.95) 0 3px, rgba(0,0,0,.6) 3px 5px, transparent 5px),
+            radial-gradient(circle at 18px calc(100% - 18px), rgba(245,222,168,.95) 0 3px, rgba(0,0,0,.6) 3px 5px, transparent 5px),
+            radial-gradient(circle at calc(100% - 18px) calc(100% - 18px), rgba(245,222,168,.95) 0 3px, rgba(0,0,0,.6) 3px 5px, transparent 5px);
+    }
+
+    .card > * { position: relative; z-index: 1; }
+
+    .card-icon {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        display: block;
+        filter: drop-shadow(0 3px 6px rgba(0,0,0,.5));
+    }
+
+    .card h2 {
+        font-size: 1.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        color: var(--gold-bright);
+        text-shadow: 0 1px 0 rgba(43,24,12,.9), 0 4px 10px rgba(0,0,0,.7);
+    }
+
+    .card p {
+        color: rgba(232,205,158,.85);
+        font-size: 1.05rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        font-style: italic;
+    }
+
+    .card .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 28px;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #ffeecb;
+        background-image: linear-gradient(180deg, #d6ab60, #8a6a3f);
+        border: 3px solid #5a3820;
+        border-radius: 12px;
+        box-shadow:
+            inset 0 1px 0 rgba(255,224,175,.4),
+            inset 0 -5px 10px rgba(0,0,0,.45),
+            0 8px 20px rgba(0,0,0,.55);
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .card:hover .cta {
+        transform: translateY(-2px);
+        box-shadow:
+            inset 0 1px 0 rgba(255,224,175,.5),
+            inset 0 -5px 10px rgba(0,0,0,.5),
+            0 12px 28px rgba(0,0,0,.65),
+            0 0 30px rgba(214,171,96,.4);
+    }
+
+    .card.sound-room {
+        border-top: 6px solid var(--emerald);
+    }
+
+    .card.sound-room .card-icon {
+        color: var(--emerald);
+    }
+
+    .card.availability-ledger {
+        border-top: 6px solid var(--amber);
+    }
+
+    .card.availability-ledger .card-icon {
+        color: var(--amber);
+    }
+
+    /* ── FOOTER ────────────────────────────────────── */
+    footer {
+        text-align: center;
+        padding: 3rem 2rem;
+        border-top: 3px dashed rgba(214,171,96,.4);
+        margin-top: 3rem;
+    }
+
+    footer p {
+        color: rgba(232,205,158,.62);
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .signature {
+        margin-top: 1rem;
+        font-style: italic;
+        color: rgba(214,171,96,.75);
+        font-size: 1.05rem;
+    }
+
+    /* ── RESPONSIVE ────────────────────────────────── */
+    @media (max-width: 768px) {
+        .hero {
+            padding: 3rem 1rem;
+            min-height: 70vh;
+        }
+
+        .d20-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1.5rem;
+        }
+
+        .d20-logo .num {
+            font-size: 32px;
+        }
+
+        .cards-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            padding: 2rem;
+        }
+
+        .ornament {
+            gap: 10px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <section class="hero">
+        <svg class="d20-logo" viewBox="4 4 100 100" aria-hidden="true">
+            <!-- outer icosahedral shell -->
+            <polygon class="shell" points="100,54 77,93.8 31,93.8 8,54 31,14.2 77,14.2"/>
+            <!-- spokes from the inner face to the shell -->
+            <path class="wire" d="M54 33 L77 14.2 M54 33 L31 14.2 M72.19 64.5 L100 54 M72.19 64.5 L77 93.8 M35.81 64.5 L8 54 M35.81 64.5 L31 93.8"/>
+            <!-- the face showing the roll -->
+            <polygon class="face" points="54,33 72.19,64.5 35.81,64.5"/>
+            <text class="num" x="54" y="56" text-anchor="middle" dominant-baseline="central">20</text>
+        </svg>
+
+        <h1>RPG Companion</h1>
+        
+        <div class="ornament">
+            <span></span>
+            <b>◆</b>
+            <span></span>
+        </div>
+
+        <p class="subtitle">Essential tools for your tabletop adventures. Coordinate your party, set the atmosphere, and focus on the story.</p>
+
+        <div class="cards-section">
+            <div class="cards-grid">
+                <a href="/sound-room/" class="card sound-room">
+                    <span class="card-icon">🎵</span>
+                    <h2>Sound Room</h2>
+                    <p>Mix ambient soundscapes and music for immersive gameplay. Dual-channel streaming with crossfade control for seamless audio transitions.</p>
+                    <span class="cta">Enter the Room →</span>
+                </a>
+
+                <a href="/availability/" class="card availability-ledger">
+                    <span class="card-icon">📜</span>
+                    <h2>Availability Ledger</h2>
+                    <p>Track party member schedules and find meeting times that work for everyone. Real-time coordination for your adventuring group.</p>
+                    <span class="cta">Open the Ledger →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Forged for adventurers · Powered by destiny · Roll initiative</p>
+        <div class="signature">May your rolls be high and your crits frequent</div>
+    </footer>
+</div>
+
+</body>
+</html>
